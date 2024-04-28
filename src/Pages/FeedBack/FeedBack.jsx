@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 import './FeedBack.css';
 
 function FeedBack() {
@@ -56,10 +57,16 @@ function FeedBack() {
 
                                 <div className=' mb-3 d-flex justify-content-around'>
                                     <div class="">
-                                        <button class="btn btn-feedback" type="">Back</button>
+                                    <Link to='/passengerduringride' class="btn btnRegister m-2 ">
+                                        Back
+                                    </Link>
                                     </div>
                                     <div class="">
-                                        <button class="btn btn-feedback" type="submit">Submit</button>
+                                        <button class="btn " type="submit">
+                                            <Link to='/passengerridehistory' class="btn btnRegister m-2 ">
+                                            Submit
+                                            </Link>
+                                        </button>
                                     </div>
                                 </div>
 

@@ -5,27 +5,27 @@ import './NavBar.css'
 function NavBar() {
     return (
         <div>
-            <nav class="navbar navbar-expand-lg bg-black">
-                <div class="container-fluid">
-                    <Link class="navbar-brand text-white fw-bold" to="/">Ride Me</Link>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon bg-white border rounded-1"></span>
+            <nav className="navbar navbar-expand-lg bg-black">
+                <div className="container-fluid">
+                    <Link className="navbar-brand text-white fw-bold fs-4" to="/">Ride Me</Link>
+                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span className="navbar-toggler-icon bg-white border rounded-1"></span>
                     </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav mx-auto">
-                            <li class="nav-item me-1">
-                                <a class="nav-link rounded-pill" href="#">Request Ride</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link rounded-pill" href="#">Ride History</a>
+                    <div className="collapse navbar-collapse" id="navbarNav">
+                        <ul className="navbar-nav mx-auto">
+                            <li className="nav-item me-1">
+                                <Link className="nav-link rounded-pill" to='/passengerrequestride'>Request Ride</Link>
+                            </li>   
+                            <li className="nav-item">
+                                <Link className="nav-link rounded-pill" to='/passengerridehistory'>Ride History</Link>
                             </li>
                         </ul>
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item me-1">
-                                <a href="#" class="btn rounded-pill">Log In</a>
+                        <ul className="navbar-nav ml-auto">
+                            <li className="nav-item me-1">
+                                <Link to='/loginpage' className="btn rounded-pill">Log In</Link>
                             </li>
-                            <li class="nav-item">
-                                <a href="#" class="btn main-btn signup-btn rounded-pill">Sign Up</a>
+                            <li className="nav-item">
+                                <Link to="registermainpage" className="btn signupbtn rounded-pill">Sign Up</Link>
                             </li>
                         </ul>
                     </div>

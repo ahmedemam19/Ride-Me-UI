@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 import image from './images/1.png';
 import './PassengerRequestRide.css'
 
@@ -16,12 +17,15 @@ function PassengerRequestRide() {
                                 <input class="form-control" type="text" placeholder="Enter destination" name="destination" required="" />
                                 <input class="form-control" type="text" placeholder="Enter price" name="price" required="" />
                                 <div class="d-flex justify-content-around w-100">
-                                    <button class="btn form-btn m-4" type="submit">
-                                        Search for driver
-                                    </button>
-                                    <button class="btn form-btn m-4" onclick="">
-                                        Back to Home
-                                    </button>
+
+                                    <Link to='/passengerprofile' class="btn btnRegister m-2 ">
+                                        Back
+                                    </Link>
+
+                                    <Link to='/passengerchoosingdriver' class="btn btnRegister m-2 ">
+                                        Search for drivers
+                                    </Link>
+
                                 </div>
                             </form>
 

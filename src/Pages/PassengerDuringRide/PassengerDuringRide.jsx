@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom';
 import './PassengerDuringRide.css';
 
 export default class PassengerDuringRide extends Component {
@@ -40,10 +41,14 @@ export default class PassengerDuringRide extends Component {
                 </div>
                 <div className="form-group row w-100">
                   <div className="col-6">
-                    <button type="button" className="btn btn-duringRide">Back</button>
+                    <Link to='/passengerchoosingdriver' class="btn btnRegister m-2 ">
+                      Back
+                    </Link>
                   </div>
                   <div className="col-6">
-                    <button type="button" className="btn btn-duringRide">Confirm Payment</button>
+                    <Link to='/feedback' class="btn btnRegister m-2 ">
+                      Confirm Payment
+                    </Link>
                   </div>
                 </div>
               </div>

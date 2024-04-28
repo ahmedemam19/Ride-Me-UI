@@ -1,3 +1,7 @@
+.navbar{
+  height: 4rem;
+}
+
 .navbar-collapse ul li a{
   color: white !important;
 }
@@ -6,12 +10,15 @@
   background-color: #4b4b4b !important;
 }
 
-.signup-btn{
-  background-color: rgb(126, 105, 105) !important;
-  font-weight: 600 !important;
-  transition: ease 0.2s !important;
+
+
+.navbar-nav .signupbtn{
+  color: black !important;
+  font-weight: 600;
+  background-color: white;
 }
 
-.signup-btn:hover{
-  background-color: #c0c0c0 !important;
+.navbar-nav .signupbtn:hover{
+  background-color: #4b4b4b;
+  color: rgb(255, 255, 255) !important;
 }

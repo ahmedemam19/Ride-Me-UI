@@ -36,7 +36,7 @@ const IntroPage = () => {
                                                 </div>
 
                                                 <div className="">
-                                                    <p>Don't have an Account ? <Link to='/registerpassenger'>Register</Link></p>
+                                                    <p>Don't have an Account ? <Link to='/registermainpage'>Register</Link></p>
                                                     <p>Already have an Account : <Link to='/loginpage'>Login</Link></p>
                                                 </div>
                                             </form>
@@ -73,7 +73,7 @@ const IntroPage = () => {
                                                 </div>
 
                                                 <div className="">
-                                                    <p>Don't have an Account ? <Link to='/registerdriver'>Register</Link></p>
+                                                    <p>Don't have an Account ? <Link to='/registermainpage'>Register</Link></p>
                                                     <p>Already have an Account : <Link to='/loginpage'>Login</Link></p>
                                                 </div>
                                             </form>

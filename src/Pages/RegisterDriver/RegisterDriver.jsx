@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import './RegisterDriver.css';
 
 const RegisterDriver = () => {
@@ -92,8 +93,16 @@ const RegisterDriver = () => {
                                     </label>
                                 </div>
 
-                                <div className="d-flex justify-content-center">
-                                    <button type="button" className="btn btnRegister">Register</button>
+                                <div className='d-flex align-items-center justify-content-around'>
+
+                                    <Link to='registermainpage' class="btn btnRegister m-4 ">
+                                        Back
+                                    </Link>
+
+                                    <Link to='/passengerprofile' class="btn btnRegister m-4 ">
+                                        Register
+                                    </Link>
+
                                 </div>
 
                                 <p className="text-center text-muted mt-5 mb-0">Already have an account? <a href="#!"

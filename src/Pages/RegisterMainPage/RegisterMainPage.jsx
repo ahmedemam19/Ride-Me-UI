@@ -4,19 +4,21 @@ import './RegisterMainPage.css';
 const RegisterMainPage = () => {
     return (
         <div>
-            <div className="container mt-5  ">
-                <div class="row cardRequestRide  w-100 ">
-                    <div class="col-lg-12 text-center fw-bold">
+            <div className="container my-5">
+                <div class="row cardRegisterMain ">
+                    <div class=" text-center fw-bold">
                         <h2 className='fw-bold'>Choose registeration based on your role .</h2>
-                        <div class="row d-flex justify-content-around w-100">
+                        <div class="row d-flex justify-content-around flex-row">
 
-                            <p class="btn form-btn m-4 col-6 ">
-                                <Link to='/registerdriver'>Driver</Link>
-                            </p>
+                            <Link to='/registerdriver' class="btn form-btn m-4 col-5 fs-2">
+                                Driver 
+                            </Link>
 
-                            <p class="btn form-btn m-4 col-6 ">
-                                <Link to='registerpassenger'>Passenger</Link>
-                            </p>
+                            <Link to='registerpassenger' class="btn form-btn m-4 col-5 fs-2">
+                                Passenger
+                            </Link>
+
+                            <Link to='/intropage' class="btn btn-danger m-4 w-25 fs-5">Back</Link>
 
                         </div>
 

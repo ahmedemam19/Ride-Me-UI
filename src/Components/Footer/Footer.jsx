@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import './Footer.css'
 
 const Footer = () => {
@@ -6,7 +7,7 @@ const Footer = () => {
             <footer className="bg-black text-white p-3">
                 <div className="container">
                     <h2 className="fs-3 fw-bold mb-3">
-                        <a href="index.html">Ride Me</a>
+                        <Link to='/'>Ride Me</Link>
                     </h2>
                     <div className="row">
                         <div className="col-md-3">

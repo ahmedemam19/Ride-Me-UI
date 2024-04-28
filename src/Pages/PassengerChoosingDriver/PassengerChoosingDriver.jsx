@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom';
 import './PassengerChoosingDriver.css';
 import carImage from './images/package_UberComfort_new_2022.png';
 
@@ -45,18 +46,28 @@ export default class PassengerChoosingDriver extends Component {
                                     <div class="region">Region</div>
                                     <div class="smoking ">Smoking </div>
                                 </div>
+
+                                {/* Start   Rating */}
                                 <div class="me-2">
                                     Rating
                                 </div>
+                                {/* End   Rating */}
+
+
+
                                 <div class="actions me-3">
-                                    <button type="button" class="btn btnChooseDriver">Request</button>
+                                    <Link to='/passengerduringride' class="btn btnRegister m-2 ">
+                                        Request
+                                    </Link>
                                 </div>
                             </div>
 
                         </div>
                     </div>
                     <div class="actions">
-                        <button type="button" class="btn btnChooseDriver">Back</button>
+                        <Link to='/passengerrequestride' class="btn btnRegister m-2 ">
+                            Back
+                        </Link>
                     </div>
                 </div>
             </div>

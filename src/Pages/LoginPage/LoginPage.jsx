@@ -41,7 +41,7 @@ const LoginPage = () => {
                                                     <button data-mdb-button-init data-mdb-ripple-init className="btn btn-dark btn-lg btn-block" type="button">Login</button>
                                                 </div>
 
-                                                <p >Don't have an account? <Link to='/registerpassenger'>Register here</Link></p>
+                                                <p >Don't have an account? <Link to='/registermainpage'>Register here</Link></p>
                                             </form>
 
                                         </div>

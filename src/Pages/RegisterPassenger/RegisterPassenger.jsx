@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import './RegisterPassenger.css'
 
 const RegisterPassenger = () => {
@@ -46,11 +47,17 @@ const RegisterPassenger = () => {
                                     </div>
 
                                     <div className="d-flex justify-content-center">
-                                        <button type="button" className="btn btnRegister">Register</button>
+                                        <Link to='registermainpage' class="btn btnRegister m-2 ">
+                                            Back
+                                        </Link>
+
+                                        <Link to='/passengerrequestride' class="btn btnRegister m-2 ">
+                                            Register
+                                        </Link>
                                     </div>
 
-                                    <p className="text-center text-muted mt-5 mb-0">Already have an account? <a href="#!"
-                                        className="fw-bold text-body"><u>Login here</u></a></p>
+                                    <p className="text-center text-muted mt-5 mb-0">Already have an account? <Link to='/loginpage'
+                                        className="fw-bold text-body"><>Login here</></Link></p>
                                 </form>
                             </div>
                         </div>

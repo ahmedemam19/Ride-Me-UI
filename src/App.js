@@ -22,26 +22,20 @@ function App() {
         <NavBar />
         <div className="content">
           <Switch>
-            <Route exact path="/registermainpage">
-              <RegisterMainPage />
-            </Route>
-            {/* <Route exact path="/">
-              <IntroPage />
-            </Route> */}
-            {/* <Route  path="/registerdriver">
-              <RegisterDriver />
-            </Route> */}
-            {/* <Route  path="/registerpassenger">
-              <RegisterPassenger />
-            </Route> */}
-            {/* <Route  path="/loginpage">
-              <LoginPage />
-            </Route> */}
-            {/* <Route  path="*">
-              <NotFound />
-            </Route> */}
+            <Route exact path="/"><IntroPage /></Route>
+            <Route  path="/registermainpage"><RegisterMainPage /></Route>
+            <Route  path="/registerdriver"><RegisterDriver /></Route>
+            <Route  path="/registerpassenger"><RegisterPassenger /></Route>
+            <Route  path="/loginpage"><LoginPage /></Route>
+            <Route  path="/passengerridehistory"><PassengerRideHistory /></Route>
+            <Route  path="/passengerrequestride"><PassengerRequestRide /></Route>
+            <Route  path="/passengerchoosingdriver"><PassengerChoosingDriver /></Route>
+            <Route  path="/passengerduringride"><PassengerDuringRide /></Route>
+            <Route  path="/feedback"><FeedBack /></Route>
+            <Route  path="*"><NotFound /></Route>
           </Switch>
         </div>
+        <Footer />
       </div>
     </Router>
   );
