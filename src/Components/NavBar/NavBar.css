@@ -1,0 +1,17 @@
+.navbar-collapse ul li a{
+  color: white !important;
+}
+
+.navbar-collapse ul li a:hover{
+  background-color: #4b4b4b !important;
+}
+
+.signup-btn{
+  background-color: rgb(126, 105, 105) !important;
+  font-weight: 600 !important;
+  transition: ease 0.2s !important;
+}
+
+.signup-btn:hover{
+  background-color: #c0c0c0 !important;
+}
