@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import './PassengerRideHistory.css';
 
 const PassengerRideHistory = () => {
@@ -39,7 +40,9 @@ const PassengerRideHistory = () => {
                         </table>
                     </div>
                     <div>
-                        <button className='btn btnRideHistory'>Back To Home</button>
+                        <Link to='passengerprofile' class="btn btnRegister m-4 ">
+                            Back to Home
+                        </Link>
                     </div>
                 </div>
             </div>

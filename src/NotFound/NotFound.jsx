@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
 
 const NotFound = () => {
-    return ( 
-        <div className="container text-center mt-5">
+    return (
+        <div className="container text-center my-5 cardRideHistory">
             <h2 className="fw-bolder">Sorry.</h2>
             <p className="fs-4">that page can't be found</p>
-            <Link className="text-decoration-none border border-danger border-1 p-1 rounded-4" to="/">Back to Home Page</Link>
+            <Link to='/passengerprofile' class="btn btnRegister m-4 ">
+                Back
+            </Link>
         </div>
-     );
+    );
 }
- 
+
 export default NotFound;

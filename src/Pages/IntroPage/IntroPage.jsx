@@ -22,9 +22,8 @@ const IntroPage = () => {
 
                                             <form>
                                                 <div className="d-flex align-items-center">
-                                                    <i className="fas fa-car-side fa-2x me-3 thirdColor" ></i>
-                                                    
-                                                    <span className="h1 fw-bold">Go anywhere with <br /><i><b>Ride Me</b></i></span>
+                                                                                                    
+                                                    <span className="h1 fw-bold">Go anywhere with <br /><i><b>Ride Me</b></i> <i className="fas fa-car-side fa-1x me-3 thirdColor" ></i></span>
                                                 </div>
 
                                                 <h5 className="fw-normal mb-3 pb-3" >Order a ride with <b>RideMe</b>, and go further, faster.</h5>

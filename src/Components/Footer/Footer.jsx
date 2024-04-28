@@ -4,7 +4,7 @@ import './Footer.css'
 const Footer = () => {
     return (
         <div>
-            <footer className="bg-black text-white p-3">
+            <footer className="bg-black text-white p-3 ">
                 <div className="container">
                     <h2 className="fs-3 fw-bold mb-3">
                         <Link to='/'>Ride Me</Link>
