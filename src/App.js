@@ -28,15 +28,15 @@ function App() {
             {/* <Route exact path="/">
               <IntroPage />
             </Route> */}
-            {/* <Route  path="/registerdriver">
+            <Route  path="/registerdriver">
               <RegisterDriver />
-            </Route> */}
-            {/* <Route  path="/registerpassenger">
+            </Route>
+            <Route  path="/registerpassenger">
               <RegisterPassenger />
-            </Route> */}
-            {/* <Route  path="/loginpage">
+            </Route>
+            <Route  path="/loginpage">
               <LoginPage />
-            </Route> */}
+            </Route>
             {/* <Route  path="*">
               <NotFound />
             </Route> */}
