@@ -12,6 +12,9 @@ import RegisterPassenger from './Pages/RegisterPassenger/RegisterPassenger';
 import LoginPage from './Pages/LoginPage/LoginPage';
 import NotFound from "./NotFound/NotFound";
 import RegisterMainPage from "./Pages/RegisterMainPage/RegisterMainPage";
+import WaitingApprove from "./Pages/WaitingApprove/WaitingApprove";
+import DriverChooseRide from "./Pages/DriverChooseRide/DriverChooseRide";
+import DriverCurrentRide from './Pages/DriverCurrentRide/DriverCurrentRide';
 
 
 
@@ -32,6 +35,9 @@ function App() {
             <Route  path="/passengerchoosingdriver"><PassengerChoosingDriver /></Route>
             <Route  path="/passengerduringride"><PassengerDuringRide /></Route>
             <Route  path="/feedback"><FeedBack /></Route>
+            <Route  path="/waitingapprove"><WaitingApprove /></Route>
+            <Route  path="/driverchooseride"><DriverChooseRide /></Route>
+            <Route  path="/drivercurrentride"><DriverCurrentRide /></Route>
             <Route  path="*"><NotFound /></Route>
           </Switch>
         </div>
