@@ -6,7 +6,8 @@ import image from "./images/photo-1539787200876-3c033a7bebcd.jpeg";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [redirect, setRedirect] = useState(false);
+  const [redirectPassenger, setRedirectPassenger] = useState(false);
+  const [redirectDriver, setRedirectDriver] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
@@ -21,21 +22,24 @@ const LoginPage = () => {
     })
       .then((res) => {
         console.log("Login successful");
-        
-        if (res.ok) {
-          setRedirect(true);
-        }
         return res.json();
       })
       .then((data) => {
-        console.log(data)
+        console.log(data);
+        if (data.role === "passenger") {
+          setRedirectPassenger(true);
+        } else if (data.role === "driver") {
+          setRedirectDriver(true);
+        }
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   };
 
-  if (redirect) {
+  if (redirectPassenger) {
+    return <Redirect to="/passengerrequestride" />; // put redirect page here on successful registration
+  } else if (redirectDriver) {
     return <Redirect to="/passengerrequestride" />; // put redirect page here on successful registration
   }
 
