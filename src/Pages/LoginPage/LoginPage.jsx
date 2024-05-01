@@ -25,10 +25,10 @@ const LoginPage = () => {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
-        if (data.role === "passenger") {
+        console.log(data[0].role);
+        if (data[0].role === "passenger") {
           setRedirectPassenger(true);
-        } else if (data.role === "driver") {
+        } else if (data[0].role === "driver") {
           setRedirectDriver(true);
         }
       })
@@ -40,7 +40,7 @@ const LoginPage = () => {
   if (redirectPassenger) {
     return <Redirect to="/passengerrequestride" />; // put redirect page here on successful registration
   } else if (redirectDriver) {
-    return <Redirect to="/passengerrequestride" />; // put redirect page here on successful registration
+    return <Redirect to="/driverchooseride" />; // put redirect page here on successful registration
   }
 
   return (
