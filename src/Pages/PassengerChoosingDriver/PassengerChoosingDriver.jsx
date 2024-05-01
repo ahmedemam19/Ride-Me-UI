@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useReducer } from "react";
+import React, { useEffect, useState, useReducer, Redirect } from "react";
 import { Link } from "react-router-dom";
 import "./PassengerChoosingDriver.css";
 import carImage from "./images/package_UberComfort_new_2022.png";
@@ -71,8 +71,26 @@ const PassengerChoosingDriver = () => {
       });
   };
 
-  const handleRequestDriver = () => {
-
+  const handleRequestDriver = (driverId) => {
+    fetch(`https://localhost:7049/api/ride/request-ride`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        passengerId: localStorage.getItem("userId"),
+        driverId: driverId, 
+        rideSource: source,
+        rideDestination: dest,
+        price: price
+      }),
+    }).then((res) => {
+        console.log("Ride request sent");
+        if (res.ok) {
+            
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   }
 
   return (
@@ -170,12 +188,12 @@ const PassengerChoosingDriver = () => {
                   Driver rating:
                   <div class="me-2 fw-bold">{driver.rating}</div>
                   <div class="actions me-3">
-                    <Link
-                      to="/passengerduringride"
+                    <button
                       class="btn btnRegister m-2 "
+                      onClick={() => handleRequestDriver(driver.id)}
                     >
                       Request
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </div>

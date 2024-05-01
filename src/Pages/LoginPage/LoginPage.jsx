@@ -4,6 +4,7 @@ import "./LoginPage.css";
 import image from "./images/photo-1539787200876-3c033a7bebcd.jpeg";
 
 const LoginPage = () => {
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [redirectPassenger, setRedirectPassenger] = useState(false);
@@ -25,7 +26,8 @@ const LoginPage = () => {
         return res.json();
       })
       .then((data) => {
-        console.log(data[0].role);
+        console.log(data[0]);
+        localStorage.setItem("userId", data[0].userId);
         if (data[0].role === "passenger") {
           setRedirectPassenger(true);
         } else if (data[0].role === "driver") {
