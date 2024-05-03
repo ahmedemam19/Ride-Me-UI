@@ -1,17 +1,17 @@
 import { useState, useEffect, useReducer } from "react";
+import { jwtDecode } from "jwt-decode";
 import { Link, Redirect } from "react-router-dom";
 import "./LoginPage.css";
 import image from "./images/photo-1539787200876-3c033a7bebcd.jpeg";
 
 const LoginPage = () => {
-  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [redirectPassenger, setRedirectPassenger] = useState(false);
   const [redirectDriver, setRedirectDriver] = useState(false);
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+    e.preventDefault();
 
     fetch(`https://localhost:7049/api/user/login`, {
       method: "POST",
@@ -22,15 +22,27 @@ const LoginPage = () => {
       }),
     })
       .then((res) => {
-        console.log("Login successful");
-        return res.json();
+        if (!res.ok) {
+          throw new Error("Failed to login");
+        }
+        return res.text();
       })
       .then((data) => {
-        console.log(data[0]);
-        localStorage.setItem("userId", data[0].userId);
-        if (data[0].role === "passenger") {
+        console.log("Response data:", data);
+
+        // Decode the JWT token
+        const decodedData = jwtDecode(data);
+        console.log("Decoded token:", decodedData);
+
+        // Using the decoded data
+        sessionStorage.setItem("userId", decodedData.UserId);
+        sessionStorage.setItem("role", decodedData.Role);
+        sessionStorage.setItem("roleId", decodedData.Id);
+        sessionStorage.setItem("Phone number", decodedData.PhoneNumber);
+
+        if (decodedData.Role === "passenger") {
           setRedirectPassenger(true);
-        } else if (data[0].role === "driver") {
+        } else if (decodedData.Role === "driver") {
           setRedirectDriver(true);
         }
       })

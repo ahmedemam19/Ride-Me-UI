@@ -1,53 +1,212 @@
-import { Link } from 'react-router-dom';
-
+import { Link } from "react-router-dom";
+import { useState, useEffect, useReducer } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import {
+  Redirect,
+  useHistory,
+} from "react-router-dom/cjs/react-router-dom.min";
 
 const DriverCurrentRide = () => {
-    return (
-        <div>
-            <div className="container mt-5 mb-5">
-                <div className='card-druing-ride mt-5'>
-                    <div className="row">
-                        <div className='d-flex flex-column justify-content-center align-items-center'>
-                        <h2 className='fw-bold'>Driver Current Ride</h2>
-                            <div className="form-group row w-100">
-                                <div className='col-12'>
-                                    <label for="source">Source :</label>
-                                    <div className=" col-lg-12">
-                                        <input type="text" className="form-control" id="source" value="Ain-Shams" readonly />
-                                    </div>
-                                </div>
-                                <div className='col-12'>
-                                    <label for="destination">Destination :</label>
-                                    <div className=" col-lg-12">
-                                        <input type="text" className="form-control" id="destination" value="Helwan" readonly />
-                                    </div>
-                                </div>
-                                <div className='col-12'>
-                                    <label for="price">Price :</label>
-                                    <div className="col-lg-12">
-                                        <input type="text" className="form-control" id="price" value="$50.00" readonly />
-                                    </div>
-                                </div>
-                            </div>
-                           
-                            <div className="form-group d-flex align-items-center justify-content-evenly w-100">
-                                <div className="">
-                                    <Link to='/driverchooseride' class="btn btnRegister m-2 ">
-                                        Back
-                                    </Link>
-                                </div>
-                                <div className="">
-                                    <Link to='/driverridehistory' class="btn btnRegister m-2 ">
-                                        Confirm Payment
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+  const history = useHistory();
+  const [_, forceUpdate] = useReducer((x) => x + 1, 0);
+
+  const [currentRideInfo, setCurrentRideInfo] = useState(null);
+  const [rideStatus, setRideStatus] = useState(null);
+  const [currentRideId, setCurrentRideId] = useState();
+
+  // send a toast notification if payment is confirmed
+  const confirmPaymentNotification = () => {
+    toast.success("Payment Confirmed", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+    toast.success("Ride Completed", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  useEffect(() => {
+    fetch(
+      `https://localhost:7049/api/Driver/get-current-ride-status/${sessionStorage.getItem(
+        "roleId"
+      )}`
+    )
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setCurrentRideInfo(data);
+        setRideStatus(data[0].status === "completed" ? true : false);
+        setCurrentRideId(data[0].rideId);
+      });
+  }, []);
+
+  useEffect(() => {
+    let interval;
+    const pollRideStatus = () => {
+      fetch(
+        `https://localhost:7049/api/Driver/get-ride-status/${currentRideId}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          if (data.rideStatus === "completed") {
+            setRideStatus(true);
+            clearInterval(interval);
+          }
+        })
+        .catch((error) => {
+          console.error("Error polling ride status:", error);
+          clearInterval(interval);
+        });
+    };
+
+    // Start polling immediately and then repeat every 5 seconds
+    interval = setInterval(pollRideStatus, 5000);
+
+    return () => clearInterval(interval); // Cleanup function to clear interval on unmount or when ride status changes
+  }, [currentRideId]);
+
+  rideStatus && confirmPaymentNotification(); // Notifications go brr
+
+  const handleGoToRequests = () => {
+    history.push("/driverchooseride");
+  };
+
+  const handleGoToIncome = () => {
+    return <Redirect to="/DriverChooseRide" />;
+  };
+
+  return (
+    <div>
+      <div className="container mt-5 mb-5">
+        <div className="card-druing-ride mt-5">
+          <div className="row">
+            <div className="d-flex flex-column justify-content-center align-items-center">
+              <h2 className="fw-bold">Current Ride Information</h2>
+              <div className="form-group row w-100">
+                <div className="col-12">
+                  <label className="h4" for="source">
+                    Passenger Name
+                  </label>
+                  <div className="col-lg-12">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="passengerName"
+                      value={currentRideInfo && currentRideInfo[0].passenger} // info from api here
+                      readonly
+                    />
+                  </div>
                 </div>
+                <div className="col-12">
+                  <label className="h4" for="source">
+                    Source
+                  </label>
+                  <div className=" col-lg-12">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="source"
+                      value={currentRideInfo && currentRideInfo[0].source}
+                      readonly
+                    />
+                  </div>
+                </div>
+                <div className="col-12">
+                  <label className="h4" for="destination">
+                    Destination
+                  </label>
+                  <div className=" col-lg-12">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="destination"
+                      value={currentRideInfo && currentRideInfo[0].destination}
+                      readonly
+                    />
+                  </div>
+                </div>
+                <div className="col-12">
+                  <label className="h4" for="price">
+                    Price
+                  </label>
+                  <div className="col-lg-12">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="price"
+                      value={currentRideInfo && currentRideInfo[0].price} // info from api here
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <div className="col-12">
+                  <label className="h4" for="price">
+                    Ride Status
+                  </label>
+                  <div className="col-lg-12 ">
+                    <input
+                      type="text"
+                      className={`form-control ${
+                        rideStatus ? "bg-success" : "bg-primary"
+                      } text-light`}
+                      id="rideStatus"
+                      value={rideStatus ? "completed" : "not completed"} // info from api here
+                      readonly
+                    />
+                  </div>
+                </div>
+                {rideStatus && (
+                  <div className="row ms-1 justify-content-center gap-5">
+                    <button
+                      className="btn btn-primary col-4 py-2 fs-5 fw-bold"
+                      onClick={handleGoToRequests}
+                    >
+                      Go to ride requests page
+                    </button>
+                    <button
+                      className="btn btn-primary col-4 py-2 fs-5 fw-bold"
+                      onClick={handleGoToIncome}
+                    >
+                      Go to calculating income page
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
+          </div>
         </div>
-    );
-}
+      </div>
+    </div>
+  );
+};
 
 export default DriverCurrentRide;

@@ -76,7 +76,7 @@ const PassengerChoosingDriver = () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        passengerId: localStorage.getItem("userId"),
+        passengerId: sessionStorage.getItem("userId"),
         driverId: driverId, 
         rideSource: source,
         rideDestination: dest,
