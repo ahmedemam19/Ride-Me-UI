@@ -68,7 +68,6 @@ function PassengerRequestRide() {
                   >
                     Search for drivers
                   </Link>
-                  
                 </div>
               </form>
             </div>

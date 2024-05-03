@@ -2,9 +2,11 @@ import React, { useEffect, useState, useReducer, Redirect } from "react";
 import { Link } from "react-router-dom";
 import "./PassengerChoosingDriver.css";
 import carImage from "./images/package_UberComfort_new_2022.png";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 const PassengerChoosingDriver = () => {
+  const history = useHistory();
   const location = useLocation();
   const source = location.state.source;
   const dest = location.state.dest;
@@ -71,27 +73,96 @@ const PassengerChoosingDriver = () => {
       });
   };
 
+  const confirmRequestSent = () => {
+    toast.success("Request Sent", {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
+
+  const RequestAccepted = (driverName) => {
+    toast.success(`Driver ${driverName} Accepted your request`, {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+    setTimeout(() => {
+      history.push("/passengerduringride");
+    }, 2000);
+  };
+
   const handleRequestDriver = (driverId) => {
     fetch(`https://localhost:7049/api/ride/request-ride`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         passengerId: sessionStorage.getItem("userId"),
-        driverId: driverId, 
+        driverId: driverId,
         rideSource: source,
         rideDestination: dest,
-        price: price
+        price: price,
       }),
-    }).then((res) => {
-        console.log("Ride request sent");
+    })
+      .then((res) => {
         if (res.ok) {
-            
+          console.log("Ride request sent");
+          confirmRequestSent();
+          setDrivers(drivers.filter((d) => d.id !== driverId));
         }
       })
       .catch((error) => {
         console.error("Error:", error);
       });
-  }
+  };
+
+  useEffect(() => {
+    let interval;
+
+    const pollRideStatus = () => {
+      fetch(
+        `https://localhost:7049/api/passenger/get-current-ride-status/${sessionStorage.getItem(
+          "roleId"
+        )}`
+      )
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error("Failed to fetch ride status");
+          }
+          return res.json(); // Parse response body as JSON
+        })
+        .then((data) => {
+          console.log("Ride status received:", data);
+          if (Array.isArray(data) && data.length === 0) {
+            console.log("Ride status is empty");
+          } else {
+            console.log("Ride status is not empty");
+            clearInterval(interval); // Stop polling when ride status is not empty
+            RequestAccepted(data[0].driver);
+          }
+        })
+        .catch((error) => {
+          console.error("Error polling ride status:", error);
+          clearInterval(interval); // Stop polling on error
+        });
+    };
+
+    // Start polling immediately and then repeat every 5 seconds
+    interval = setInterval(pollRideStatus, 5000);
+
+    // Cleanup function to clear interval on unmount or when ride status changes
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div>
@@ -146,7 +217,6 @@ const PassengerChoosingDriver = () => {
             </select>
           </div>
           <div className="col-md-3">
-
             {/* an attempt to make a clear filter */}
 
             {/* <button
@@ -173,7 +243,6 @@ const PassengerChoosingDriver = () => {
                   <div class="avatar left">
                     <img src={carImage} alt="the photo" />
                   </div>
-
                   <div className="col">
                     <div class="txt" key={driver.id}>
                       <div class="name fs-5 fw-bold">{driver.name}</div>

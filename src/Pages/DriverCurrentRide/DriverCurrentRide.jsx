@@ -100,7 +100,7 @@ const DriverCurrentRide = () => {
   };
 
   const handleGoToIncome = () => {
-    return <Redirect to="/DriverChooseRide" />;
+    history.push("/pickdaymonth");
   };
 
   return (
@@ -163,6 +163,21 @@ const DriverCurrentRide = () => {
                       className="form-control"
                       id="price"
                       value={currentRideInfo && currentRideInfo[0].price} // info from api here
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <div className="col-12">
+                  <label className="h4" for="price">
+                    Passenger phone number
+                  </label>
+                  <div className="col-lg-12">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="phoneNumber"
+                      value={currentRideInfo && currentRideInfo[0].passengerPhoneNumber} // info from api here
                       readonly
                     />
                   </div>

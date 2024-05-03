@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Footer from "./Components/Footer/Footer";
 import NavBar from "./Components/NavBar/NavBar";
 import PassengerRequestRide from "./Pages/PassengerRequestRide/PassengerRequestRide";
@@ -15,8 +17,8 @@ import RegisterMainPage from "./Pages/RegisterMainPage/RegisterMainPage";
 import WaitingApprove from "./Pages/WaitingApprove/WaitingApprove";
 import DriverChooseRide from "./Pages/DriverChooseRide/DriverChooseRide";
 import DriverCurrentRide from "./Pages/DriverCurrentRide/DriverCurrentRide";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import PickDayMonth from "./Pages/DriverCalculateIncome/PickDayMonth";
+
 
 function App() {
   return (
@@ -64,6 +66,9 @@ function App() {
             </Route>
             <Route path="/drivercurrentride">
               <DriverCurrentRide />
+            </Route>
+            <Route path="/pickdaymonth">
+              <PickDayMonth />
             </Route>
             <Route path="*">
               <NotFound />
