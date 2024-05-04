@@ -1,8 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useState, useEffect, useReducer } from "react";
 import "./PassengerDuringRide.css";
+import { ToastContainer, toast } from "react-toastify";
 
 const PassengerDuringRide = () => {
+  const history = useHistory();
+
   const [currentRideInfo, setCurrentRideInfo] = useState(null);
   const [rideStatus, setRideStatus] = useState(null);
   const [currentRideId, setCurrentRideId] = useState();
@@ -32,13 +35,40 @@ const PassengerDuringRide = () => {
         console.log(data);
         setCurrentRideInfo(data);
         setCurrentRideId(data[0].rideId);
-        sessionStorage.setItem("currentRideId", data[0].rideId)
+        sessionStorage.setItem("currentRideId", data[0].rideId);
+        sessionStorage.setItem("currentRideDriverName", data[0].driver);
+        sessionStorage.setItem("currentRideSource", data[0].source);
+        sessionStorage.setItem("currentRideDestination", data[0].destination);
+        sessionStorage.setItem("currentRidePrice", data[0].price);
       });
   }, []);
 
   const handleConfirmPayment = () => {
-    
-  }
+    toast.success("Payment Confirmed", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+    toast.info("Redirecting to feedback...", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+    setRideStatus(true);
+    setTimeout(() => {
+      history.push("/feedback");
+    }, 4000);
+  };
 
   return (
     <div>
@@ -67,7 +97,9 @@ const PassengerDuringRide = () => {
                       type="text"
                       className="form-control"
                       id="phoneNumber"
-                      value={currentRideInfo && currentRideInfo[0].driverPhoneNumber}
+                      value={
+                        currentRideInfo && currentRideInfo[0].driverPhoneNumber
+                      }
                       readonly
                     />
                   </div>
@@ -129,7 +161,14 @@ const PassengerDuringRide = () => {
               </div>
               <div className="form-group row w-100">
                 <div className="col d-flex justify-content-center">
-                  <button className="btn btn-primary fw-semibold" onClick={handleConfirmPayment}>Confirm Payment</button>
+                  <button
+                    className={`btn ${
+                      rideStatus ? "btn-success" : "btn-primary"
+                    } fw-semibold`}
+                    onClick={handleConfirmPayment}
+                  >
+                    Confirm Payment
+                  </button>
                 </div>
               </div>
             </div>
