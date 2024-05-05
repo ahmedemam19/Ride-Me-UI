@@ -3,11 +3,54 @@ import { useState, useEffect, useReducer } from "react";
 import { Link, useHistory } from "react-router-dom";
 import "./FeedBack.css";
 import { ToastContainer, toast } from "react-toastify";
+import { getAuthToken } from "../../Services/authToken";
+
 
 function FeedBack() {
   const history = useHistory();
   const [rating, setRating] = useState(null);
   const [feedback, setFeedback] = useState(null);
+  const { token, user } = getAuthToken();
+
+  const [finishStatus, setFinishStatus] = useState(false);
+
+  const onBeforeUnloadEvent = (event) => {
+    if (!finishStatus) {
+      event.preventDefault();
+      event.returnValue = "";
+      return "Going back will cancel all ride requests. Are you sure?";
+    }
+  };
+
+  const onBackButtonEvent = (event) => {
+    event.preventDefault();
+    if (!finishStatus) {
+      if (
+        window.confirm(
+          "Are you sure you don't want to leave feedback?"
+        )
+      ) {
+        setFinishStatus(true);
+        // the logic here is to normally go back
+        history.push("/passengerridehistory");
+      } else {
+        window.history.pushState(null, null, window.location.pathname);
+        setFinishStatus(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    window.history.pushState(null, null, window.location.pathname);
+    window.addEventListener("popstate", onBackButtonEvent);
+    window.addEventListener("beforeunload", onBeforeUnloadEvent);
+
+    return () => {
+      window.removeEventListener("popstate", onBackButtonEvent);
+      window.removeEventListener("beforeunload", onBeforeUnloadEvent);
+    };
+  }, []);
+
 
   //   useEffect(() => {
   //     console.log(feedback);
@@ -40,11 +83,16 @@ function FeedBack() {
     }, 3000);
   };
 
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
+
   const handleRatingSubmit = (e) => {
     e.preventDefault();
     fetch("https://localhost:7049/api/Passenger/rate-ride", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify({
         id: sessionStorage.getItem("currentRideId"),
         rating: rating,

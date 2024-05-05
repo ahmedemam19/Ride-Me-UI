@@ -10,6 +10,10 @@ function PassengerRequestRide() {
   const [redirectPassenger, setRedirectPassenger] = useState(false);
   const [redirectDriver, setRedirectDriver] = useState(false);
 
+  sessionStorage.setItem("source", source)
+  sessionStorage.setItem("dest", dest)
+  sessionStorage.setItem("price", price)
+
   return (
     <div>
       <body>

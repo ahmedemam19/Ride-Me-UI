@@ -1,15 +1,21 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect, useReducer } from "react";
 import "./PassengerRideHistory.css";
+import { getAuthToken } from "../../Services/authToken";
 
 const PassengerRideHistory = () => {
   const [rides, setRides] = useState();
+  const { token, user } = getAuthToken();
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
 
   useEffect(() => {
     fetch(
-      `https://localhost:7049/api/Passenger/get-passenger-ride-history/${sessionStorage.getItem(
-        "roleId"
-      )}`
+      `https://localhost:7049/api/Passenger/get-passenger-ride-history/${user.Id}`,
+      { headers }
     )
       .then((res) => {
         return res.json();

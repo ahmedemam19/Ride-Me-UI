@@ -2,6 +2,8 @@ import { useState, useEffect, useReducer } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
+import { getAuthToken } from "../../Services/authToken";
+
 const DriverChooseRide = () => {
   const [_, forceUpdate] = useReducer((x) => x + 1, 0);
 
@@ -9,12 +11,17 @@ const DriverChooseRide = () => {
 
   const [requests, setRequests] = useState();
 
+  const { token, user } = getAuthToken();
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
+
   useEffect(() => {
-    fetch(
-      `https://localhost:7049/api/Driver/get-requested-ride/${sessionStorage.getItem(
-        "roleId"
-      )}`
-    )
+    fetch(`https://localhost:7049/api/Driver/get-requested-ride/${user.Id}`, {
+      headers,
+    })
       .then((res) => {
         return res.json();
       })
@@ -53,6 +60,7 @@ const DriverChooseRide = () => {
   const handleAcceptRequest = (rideId, rideSource, rideDest, ridePrice) => {
     fetch(`https://localhost:7049/api/driver/accept-ride/${rideId}`, {
       method: "PUT",
+      headers
     })
       .then((res) => {
         if (res.ok) {
@@ -74,6 +82,7 @@ const DriverChooseRide = () => {
   const handleReject = (rideId) => {
     fetch(`https://localhost:7049/api/driver/reject-ride/${rideId}`, {
       method: "PUT",
+      headers
     })
       .then((res) => {
         if (res.ok) {

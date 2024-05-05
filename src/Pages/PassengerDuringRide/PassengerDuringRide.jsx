@@ -2,6 +2,8 @@ import { Link, useHistory } from "react-router-dom";
 import { useState, useEffect, useReducer } from "react";
 import "./PassengerDuringRide.css";
 import { ToastContainer, toast } from "react-toastify";
+import { getAuthToken } from "../../Services/authToken";
+import axios from "axios";
 
 const PassengerDuringRide = () => {
   const history = useHistory();
@@ -9,24 +11,57 @@ const PassengerDuringRide = () => {
   const [currentRideInfo, setCurrentRideInfo] = useState(null);
   const [rideStatus, setRideStatus] = useState(null);
   const [currentRideId, setCurrentRideId] = useState();
+  const { token, user } = getAuthToken();
+
+  // Prevent user from losing data by going back or reload {I wrote this comment >__}
+  const [finishStatus, setFinishStatus] = useState(false);
+
+  const onBeforeUnloadEvent = (event) => {
+    if (!finishStatus) {
+      event.preventDefault();
+      event.returnValue = "";
+      return "Going back will cancel all ride requests. Are you sure?";
+    }
+  };
+
+  const onBackButtonEvent = (event) => {
+    event.preventDefault();
+    if (!finishStatus) {
+      if (
+        window.confirm(
+          "Going back will cancel all ride requests. Are you sure?"
+        )
+      ) {
+        setFinishStatus(true);
+        // the logic here is to normally go back
+        history.goBack();
+      } else {
+        window.history.pushState(null, null, window.location.pathname);
+        setFinishStatus(false);
+      }
+    }
+  };
 
   useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      event.preventDefault();
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.history.pushState(null, null, window.location.pathname);
+    window.addEventListener("popstate", onBackButtonEvent);
+    window.addEventListener("beforeunload", onBeforeUnloadEvent);
 
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("popstate", onBackButtonEvent);
+      window.removeEventListener("beforeunload", onBeforeUnloadEvent);
     };
   }, []);
 
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
+
   useEffect(() => {
     fetch(
-      `https://localhost:7049/api/passenger/get-current-ride-status/${sessionStorage.getItem(
-        "roleId"
-      )}`
+      `https://localhost:7049/api/passenger/get-current-ride-status/${user.Id}`,
+      { headers }
     )
       .then((res) => {
         return res.json();
@@ -44,30 +79,48 @@ const PassengerDuringRide = () => {
   }, []);
 
   const handleConfirmPayment = () => {
-    toast.success("Payment Confirmed", {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-    toast.info("Redirecting to feedback...", {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-    setRideStatus(true);
-    setTimeout(() => {
-      history.push("/feedback");
-    }, 4000);
+    // axios is cool, shame we knew about it late in development
+    fetch(`https://localhost:7049/api/passenger/confirm-payment/${currentRideId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: {}
+    })
+      .then((res) => {
+        if (res.ok) {
+          console.log("Payment confirmed");
+          toast.success("Payment Confirmed", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+          toast.info("Redirecting to feedback...", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+          setRideStatus(true);
+          setTimeout(() => {
+            history.push("/feedback");
+          }, 4000);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+
   };
 
   return (

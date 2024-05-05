@@ -6,9 +6,13 @@ import {
   useHistory,
 } from "react-router-dom/cjs/react-router-dom.min";
 
+import { getAuthToken } from "../../Services/authToken";
+
 const DriverCurrentRide = () => {
   const history = useHistory();
   const [_, forceUpdate] = useReducer((x) => x + 1, 0);
+
+  const { token, user } = getAuthToken();
 
   const [currentRideInfo, setCurrentRideInfo] = useState(null);
   const [rideStatus, setRideStatus] = useState(null);
@@ -50,20 +54,26 @@ const DriverCurrentRide = () => {
     };
   }, []);
 
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
+
   useEffect(() => {
     fetch(
-      `https://localhost:7049/api/Driver/get-current-ride-status/${sessionStorage.getItem(
-        "roleId"
-      )}`
+      `https://localhost:7049/api/Driver/get-current-ride-status/${user.Id}`,
+      { headers }
     )
       .then((res) => {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
+        console.log(data[data.length - 1]);
         setCurrentRideInfo(data);
-        setRideStatus(data[0].status === "completed" ? true : false);
-        setCurrentRideId(data[0].rideId);
+        setRideStatus(
+          data[data.length - 1].status === "completed" ? true : false
+        );
+        setCurrentRideId(data[data.length - 1].rideId);
       });
   }, []);
 
@@ -71,7 +81,8 @@ const DriverCurrentRide = () => {
     let interval;
     const pollRideStatus = () => {
       fetch(
-        `https://localhost:7049/api/Driver/get-ride-status/${currentRideId}`
+        `https://localhost:7049/api/Driver/get-ride-status/${currentRideId}`,
+        { headers }
       )
         .then((res) => res.json())
         .then((data) => {
@@ -177,7 +188,10 @@ const DriverCurrentRide = () => {
                       type="text"
                       className="form-control"
                       id="phoneNumber"
-                      value={currentRideInfo && currentRideInfo[0].passengerPhoneNumber} // info from api here
+                      value={
+                        currentRideInfo &&
+                        currentRideInfo[0].passengerPhoneNumber
+                      } // info from api here
                       readonly
                     />
                   </div>

@@ -5,6 +5,8 @@ import "./PickDayMonth.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+import { getAuthToken } from "../../Services/authToken";
+
 function PickDayMonth() {
   const [date, setDate] = useState(new Date());
 
@@ -13,6 +15,8 @@ function PickDayMonth() {
   const [showMonth, setShowMonth] = useState(true);
 
   const [Income, setIncome] = useState(null);
+
+  const { token, user } = getAuthToken();
 
   const handleDateChange = (date) => {
     setDate(date);
@@ -40,7 +44,10 @@ function PickDayMonth() {
   useEffect(() => {
     fetch(`https://localhost:7049/api/driver/get-driver-daily-income`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({
         driverId: sessionStorage.getItem("roleId"),
         dateString: format(date, "yyyy-MM-dd"),
@@ -65,7 +72,10 @@ function PickDayMonth() {
   useEffect(() => {
     fetch(`https://localhost:7049/api/driver/get-driver-monthly-income`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({
         driverId: sessionStorage.getItem("roleId"),
         month: format(month, "M"),
@@ -84,7 +94,6 @@ function PickDayMonth() {
         console.error("Error:", error);
       });
   }, [month, _]);
-
 
   return (
     <div className="container-sm rounded border border-3 shadow my-4 py-3">
@@ -142,9 +151,7 @@ function PickDayMonth() {
             {showMonth && month && format(month, "MMMM yyyy")} is:
           </p>
 
-          <p className="lead display-4 text-center fw-bold">
-            {Income}
-          </p>
+          <p className="lead display-4 text-center fw-bold">{Income}</p>
         </div>
       </div>
     </div>

@@ -3,8 +3,11 @@ import { jwtDecode } from "jwt-decode";
 import { Link, Redirect } from "react-router-dom";
 import "./LoginPage.css";
 import image from "./images/photo-1539787200876-3c033a7bebcd.jpeg";
+import { setAuthToken } from "../../Services/authToken";
+import { useLocation, useHistory } from "react-router-dom";
 
 const LoginPage = () => {
+  const history = useHistory()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [redirectPassenger, setRedirectPassenger] = useState(false);
@@ -30,11 +33,14 @@ const LoginPage = () => {
       .then((data) => {
         console.log("Response data:", data);
 
+        // add to session
+        setAuthToken(data);
+
         // Decode the JWT token
         const decodedData = jwtDecode(data);
         console.log("Decoded token:", decodedData);
 
-        // Using the decoded data
+        // Using important info in the decoded data
         sessionStorage.setItem("userId", decodedData.UserId);
         sessionStorage.setItem("role", decodedData.Role);
         sessionStorage.setItem("roleId", decodedData.Id);
@@ -44,6 +50,8 @@ const LoginPage = () => {
           setRedirectPassenger(true);
         } else if (decodedData.Role === "driver") {
           setRedirectDriver(true);
+        } else if (decodedData.Role === "admin") {
+          history.push("")
         }
       })
       .catch((error) => {

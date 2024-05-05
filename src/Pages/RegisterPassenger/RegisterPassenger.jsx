@@ -14,7 +14,7 @@ const RegisterPassenger = () => {
 
     fetch(`https://localhost:7049/api/user/add-passenger`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json"},
       body: JSON.stringify({
         name: name,
         phoneNumber: phoneNumber,

@@ -4,13 +4,14 @@ import "./PassengerChoosingDriver.css";
 import carImage from "./images/package_UberComfort_new_2022.png";
 import { useLocation, useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { getAuthToken } from "../../Services/authToken";
 
 const PassengerChoosingDriver = () => {
   const history = useHistory();
   const location = useLocation();
-  const source = location.state.source;
-  const dest = location.state.dest;
-  const price = location.state.price;
+  const source = sessionStorage.getItem("source")
+  const dest = sessionStorage.getItem("dest")
+  const price = sessionStorage.getItem("price")
   const [_, forceUpdate] = useReducer((x) => x + 1, 0);
 
   const [cities, setCities] = useState(null);
@@ -21,46 +22,128 @@ const PassengerChoosingDriver = () => {
   const [filterCity, setFilterCity] = useState("");
   const [filterSmoking, setFilterSmoking] = useState("");
 
-  useEffect(() => {
-    // get initial drivers
-    fetch("https://localhost:7049/api/passenger/get-available-drivers")
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
-        setDrivers(data);
-      });
-    // get cities
-    fetch("https://localhost:7049/api/user/get-cities")
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
-        setCities(data);
-      });
-    // get available car types
-    fetch("https://localhost:7049/api/passenger/get-available-car-types")
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
-        setCarTypes(data);
-      });
-  }, [_]);
+  const { token, user } = getAuthToken();
+
+  if (!token || Object.keys(token).length === 0) {
+    // Token is null or empty
+    toast.info("Session expired! please login again", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+    history.push("/");
+  }
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
+
+  console.log({ headers });
 
   useEffect(() => {
-    console.log(filterSmoking);
-  }, [filterSmoking]);
+    const fetchData = async () => {
+      // preventing errors from accumulating when token is empty
+      try {
+        // get initial drivers
+        const driversResponse = await fetch(
+          "https://localhost:7049/api/passenger/get-available-drivers",
+          { headers }
+        );
+        if (!driversResponse.ok) {
+          throw new Error("Failed to fetch drivers");
+        }
+        const driversData = await driversResponse.json();
+        console.log("Authorized");
+        console.log(driversData);
+        setDrivers(driversData);
+
+        // get cities
+        const citiesResponse = await fetch(
+          "https://localhost:7049/api/user/get-cities",
+          { headers }
+        );
+        if (!citiesResponse.ok) {
+          throw new Error("Failed to fetch cities");
+        }
+        const citiesData = await citiesResponse.json();
+        console.log(citiesData);
+        setCities(citiesData);
+
+        // get available car types
+        const carTypesResponse = await fetch(
+          "https://localhost:7049/api/passenger/get-available-car-types",
+          { headers }
+        );
+        if (!carTypesResponse.ok) {
+          throw new Error("Failed to fetch car types");
+        }
+        const carTypesData = await carTypesResponse.json();
+        console.log(carTypesData);
+        setCarTypes(carTypesData);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    fetchData();
+  }, [_]);
+
+  // Prevent user from losing data by going back or reload {I wrote this comment >__}
+  const [finishStatus, setFinishStatus] = useState(false);
+
+  const onBeforeUnloadEvent = (event) => {
+    if (!finishStatus) {
+      event.preventDefault();
+      event.returnValue = "";
+      return "Going back will cancel all ride requests. Are you sure?";
+    }
+  };
+
+  const onBackButtonEvent = (event) => {
+    event.preventDefault();
+    if (!finishStatus) {
+      if (
+        window.confirm(
+          "Going back will cancel all ride requests. Are you sure?"
+        )
+      ) {
+        setFinishStatus(true);
+        // the logic here is to normally go back
+        history.goBack();
+      } else {
+        window.history.pushState(null, null, window.location.pathname);
+        setFinishStatus(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    window.history.pushState(null, null, window.location.pathname);
+    window.addEventListener("popstate", onBackButtonEvent);
+    window.addEventListener("beforeunload", onBeforeUnloadEvent);
+
+    return () => {
+      window.removeEventListener("popstate", onBackButtonEvent);
+      window.removeEventListener("beforeunload", onBeforeUnloadEvent);
+    };
+  }, []);
+
+  // useEffect(() => {
+  //   console.log(filterSmoking);
+  // }, [filterSmoking]);
 
   const handleFilterDriver = () => {
     const url = `https://localhost:7049/api/passenger/get-filtered-drivers?carType=${filterCar}&smoking=${filterSmoking}&city=${filterCity}`;
 
     console.log(url);
 
-    fetch(url)
+    fetch(url, { headers })
       .then((res) => {
         return res.json();
       })
@@ -105,9 +188,12 @@ const PassengerChoosingDriver = () => {
   const handleRequestDriver = (driverId) => {
     fetch(`https://localhost:7049/api/ride/request-ride`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({
-        passengerId: sessionStorage.getItem("userId"),
+        passengerId: user.UserId, // sessionStorage.getItem("userId")
         driverId: driverId,
         rideSource: source,
         rideDestination: dest,
@@ -131,9 +217,8 @@ const PassengerChoosingDriver = () => {
 
     const pollRideStatus = () => {
       fetch(
-        `https://localhost:7049/api/passenger/get-current-ride-status/${sessionStorage.getItem(
-          "roleId"
-        )}`
+        `https://localhost:7049/api/passenger/get-current-ride-status/${user.Id}`,
+        { headers }
       )
         .then((res) => {
           if (!res.ok) {
