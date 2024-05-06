@@ -27,6 +27,7 @@ export function App() {
       <Navbar />
       <ToastContainer />
       <Outlet />
+      <Footer />
     
     </>
   );
