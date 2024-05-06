@@ -1,13 +1,13 @@
 import React from "react";
 import { useState, useEffect, useReducer } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate  } from "react-router-dom";
 import "./FeedBack.css";
 import { ToastContainer, toast } from "react-toastify";
 import { getAuthToken } from "../../Services/authToken";
 
 
 function FeedBack() {
-  const history = useHistory();
+  const history = useNavigate();
   const [rating, setRating] = useState(null);
   const [feedback, setFeedback] = useState(null);
   const { token, user } = getAuthToken();
@@ -32,7 +32,7 @@ function FeedBack() {
       ) {
         setFinishStatus(true);
         // the logic here is to normally go back
-        history.push("/passengerridehistory");
+        history("/passengerridehistory");
       } else {
         window.history.pushState(null, null, window.location.pathname);
         setFinishStatus(false);
@@ -79,7 +79,7 @@ function FeedBack() {
     });
 
     setTimeout(() => {
-      history.push("/passengerridehistory");
+      history("/passengerridehistory");
     }, 3000);
   };
 

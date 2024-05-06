@@ -4,7 +4,7 @@ import './Footer.css'
 const Footer = () => {
     return (
         <div>
-            <footer className="bg-black text-white p-3 ">
+            {/* <footer className="bg-black text-white p-3 ">
                 <div className="container">
                     <h2 className="fs-3 fw-bold mb-3">
                         <Link to='/'>Ride Me</Link>
@@ -52,8 +52,51 @@ const Footer = () => {
                         </div>
                     </div>
                 </div>
-            </footer>
-
+            </footer> */}
+            <footer >
+    <div className="container">
+      <div className="foot-logo fst-italic mt-3">
+        <a href="index.html">Ride Me</a>
+      </div>
+      <div className="lists-cont d-lg-flex justify-content-between">
+        <ul>
+          <p>Company</p>
+          <li><a href="#">About us</a></li>
+          <li><a href="drive.html">Our offerings</a></li>
+          <li><a href="#">Newsroom</a></li>
+          <li><a href="#">Investors</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">AI</a></li>
+          <li><a href="#">Gift cards</a></li>
+        </ul>
+        <ul>
+          <p>Products</p>
+          <li><a href="#">Ride</a></li>
+          <li><a href="drive.html">ride me for business</a></li>
+          <li><a href="#">ride me freight</a></li>
+        </ul>
+        <ul>
+          <p>Global citizenship</p>
+          <li><a href="#">Safety</a></li>
+          <li><a href="#">Diversity and Inclusion</a></li>
+          <li><a href="#">Sustainability</a></li>
+        </ul>
+        <ul>
+          <p>Travel</p>
+          <li><a href="#">Reserve</a></li>
+          <li><a href="#">Airports</a></li>
+        </ul>
+      </div>
+      <div className="icons-cont mt-3">
+        <a href="#"><i className="fa-brands fa-facebook"></i></a>
+        <a href="#"><i className="fa-brands fa-twitter"></i></a>
+        <a href="#"><i className="fa-brands fa-youtube"></i></a>
+        <a href="#"><i className="fa-brands fa-linkedin"></i></a>
+        <a href="#"><i className="fa-brands fa-instagram"></i></a>
+      </div>
+    </div>
+  </footer>
         </div>
     );
 }

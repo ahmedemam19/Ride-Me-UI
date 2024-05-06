@@ -1,17 +1,16 @@
 import { useState, useEffect, useReducer } from "react";
 import { jwtDecode } from "jwt-decode";
-import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect, Navigate } from "react-router-dom";
 import "./LoginPage.css";
 import image from "./images/photo-1539787200876-3c033a7bebcd.jpeg";
 import { setAuthToken } from "../../Services/authToken";
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
-  const history = useHistory()
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [redirectPassenger, setRedirectPassenger] = useState(false);
-  const [redirectDriver, setRedirectDriver] = useState(false);
+  const [failedLogin, setFailedLogin] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,6 +25,7 @@ const LoginPage = () => {
     })
       .then((res) => {
         if (!res.ok) {
+          setFailedLogin("Invalid credentials");
           throw new Error("Failed to login");
         }
         return res.text();
@@ -33,37 +33,37 @@ const LoginPage = () => {
       .then((data) => {
         console.log("Response data:", data);
 
-        // add to session
-        setAuthToken(data);
+        if (jwtDecode(data).Status === "waiting") {
 
-        // Decode the JWT token
-        const decodedData = jwtDecode(data);
-        console.log("Decoded token:", decodedData);
+          setFailedLogin("User still waiting for approval");
+          return "Not approved";
+        } else {
+          // add to session
+          setAuthToken(data);
 
-        // Using important info in the decoded data
-        sessionStorage.setItem("userId", decodedData.UserId);
-        sessionStorage.setItem("role", decodedData.Role);
-        sessionStorage.setItem("roleId", decodedData.Id);
-        sessionStorage.setItem("Phone number", decodedData.PhoneNumber);
+          // Decode the JWT token
+          const decodedData = jwtDecode(data);
+          console.log("Decoded token:", decodedData);
 
-        if (decodedData.Role === "passenger") {
-          setRedirectPassenger(true);
-        } else if (decodedData.Role === "driver") {
-          setRedirectDriver(true);
-        } else if (decodedData.Role === "admin") {
-          history.push("")
+          // Using important info in the decoded data
+          sessionStorage.setItem("userId", decodedData.UserId);
+          sessionStorage.setItem("role", decodedData.Role);
+          sessionStorage.setItem("roleId", decodedData.Id);
+          sessionStorage.setItem("Phone number", decodedData.PhoneNumber);
+
+          if (decodedData.Role === "passenger") {
+            navigate("/passengerrequestride", { replace: true });
+          } else if (decodedData.Role === "driver") {
+            navigate("/driverchooseride", { replace: true });
+          } else if (decodedData.Role === "admin") {
+            navigate("/adminpage", { replace: true });
+          }
         }
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   };
-
-  if (redirectPassenger) {
-    return <Redirect to="/passengerrequestride" />; // put redirect page here on successful registration
-  } else if (redirectDriver) {
-    return <Redirect to="/driverchooseride" />; // put redirect page here on successful registration
-  }
 
   return (
     <div>
@@ -128,6 +128,8 @@ const LoginPage = () => {
                             Login
                           </button>
                         </div>
+
+                        <p className="h4 text-danger">{failedLogin && failedLogin}</p>
 
                         <p>
                           Don't have an account?{" "}

@@ -59,7 +59,7 @@ const PassengerRideHistory = () => {
                         <td>{ride.destination}</td>
                         <td>{ride.status}</td>
                         <td>{ride.price}</td>
-                        <td>{ride.rating}</td>
+                        <td>{ride.rating === -1 ? "None" : ride.rating}</td>
                         <td>{ride.feedback}</td>
                         <td>{ride.date}</td>
                       </tr>
@@ -69,8 +69,8 @@ const PassengerRideHistory = () => {
             </table>
           </div>
           <div>
-            <Link to="passengerprofile" class="btn btnRegister m-4 ">
-              Back to Home
+            <Link to="/passengerrequestride" class="btn btnRegister m-4 ">
+              Back to Request rides
             </Link>
           </div>
         </div>

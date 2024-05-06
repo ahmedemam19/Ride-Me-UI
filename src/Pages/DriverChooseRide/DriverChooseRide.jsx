@@ -1,5 +1,5 @@
 import { useState, useEffect, useReducer } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect, Navigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
 import { getAuthToken } from "../../Services/authToken";
@@ -97,7 +97,7 @@ const DriverChooseRide = () => {
   };
 
   if (redirectCurrentRide) {
-    return <Redirect to="/drivercurrentride" />;
+    return (<Navigate to="/drivercurrentride" />);
   }
 
   return (

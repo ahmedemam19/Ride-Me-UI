@@ -3,26 +3,26 @@ import { ToastContainer, toast } from "react-toastify";
 import { useLocation, useHistory } from "react-router-dom";
 
 export const setAuthToken = (token) => {
-  localStorage.setItem("token", token);
+  sessionStorage.setItem("token", token);
 };
 
 export const getAuthToken = () => {
-  if (localStorage.getItem("token")) {
-    const user = jwtDecode(localStorage.getItem("token"));
+  if (sessionStorage.getItem("token")) {
+    const user = jwtDecode(sessionStorage.getItem("token"));
     if (Date.now() >= user.exp * 1000) {
       console.log("Token expired")
       // remove token
       removeAuthToken();
       return {};
     }
-    return { token: localStorage.getItem("token"), user: user };
+    return { token: sessionStorage.getItem("token"), user: user };
   } else {
     return {};
   }
 };
 
 export const removeAuthToken = () => {
-  if (localStorage.getItem("token")) {
-    localStorage.removeItem("token");
+  if (sessionStorage.getItem("token")) {
+    sessionStorage.removeItem("token");
   }
 };

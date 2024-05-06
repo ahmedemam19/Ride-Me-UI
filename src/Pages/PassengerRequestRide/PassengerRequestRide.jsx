@@ -1,5 +1,5 @@
 import { useState, useEffect, useReducer } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import image from "./images/1.png";
 import "./PassengerRequestRide.css";
 
@@ -10,9 +10,19 @@ function PassengerRequestRide() {
   const [redirectPassenger, setRedirectPassenger] = useState(false);
   const [redirectDriver, setRedirectDriver] = useState(false);
 
-  sessionStorage.setItem("source", source)
-  sessionStorage.setItem("dest", dest)
-  sessionStorage.setItem("price", price)
+  sessionStorage.setItem("source", source);
+  sessionStorage.setItem("dest", dest);
+  sessionStorage.setItem("price", price);
+
+  useEffect(() => {
+    navigate("/passengerrequestride", { replace: true });
+  }, []);
+
+  const navigate = useNavigate();
+
+  const handleSubmit = () => {
+    navigate("/passengerchoosingdriver");
+  };
 
   return (
     <div>
@@ -26,13 +36,13 @@ function PassengerRequestRide() {
                 </i>
               </h1>
               <p>Request a ride, hop in, and go.</p>
-              <form>
+              <form onSubmit={handleSubmit}>
                 <input
                   class="form-control"
                   type="text"
                   placeholder="Enter location"
                   name="location"
-                  required=""
+                  required
                   value={source}
                   onChange={(e) => setSource(e.target.value)}
                 />
@@ -41,7 +51,7 @@ function PassengerRequestRide() {
                   type="text"
                   placeholder="Enter destination"
                   name="destination"
-                  required=""
+                  required
                   value={dest}
                   onChange={(e) => setDest(e.target.value)}
                 />
@@ -50,7 +60,7 @@ function PassengerRequestRide() {
                   type="text"
                   placeholder="Enter price"
                   name="price"
-                  required=""
+                  required
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
                 />
@@ -59,19 +69,9 @@ function PassengerRequestRide() {
                     Back
                   </Link>
 
-                  <Link
-                    to={{
-                      pathname: "/passengerchoosingdriver",
-                      state: {
-                        source: source,
-                        dest: dest,
-                        price: price,
-                      },
-                    }}
-                    className="btn btnRegister m-2"
-                  >
+                  <button className="btn btnRegister m-2" type="submit">
                     Search for drivers
-                  </Link>
+                  </button>
                 </div>
               </form>
             </div>

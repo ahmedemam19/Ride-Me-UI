@@ -1,5 +1,5 @@
 import { useState, useEffect, useReducer } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect, Navigate } from "react-router-dom";
 import "./RegisterDriver.css";
 
 const RegisterDriver = () => {
@@ -59,7 +59,7 @@ const RegisterDriver = () => {
   };
 
   if (redirect) {
-    return <Redirect to="/checkforapprove" />; // redirect page here on successful registration
+    return <Navigate to="/waitingapprove" />; // redirect page here on successful registration
   }
 
   return (
@@ -73,7 +73,7 @@ const RegisterDriver = () => {
               <form onSubmit={(e) => handleSubmit(e)}>
                 <div data-mdb-input-init className="form-outline mb-4">
                   <label className="form-label" for="">
-                    User Name
+                    Full Name
                   </label>
                   <input
                     type="text"
@@ -140,7 +140,7 @@ const RegisterDriver = () => {
 
                 <div className="d-flex mb-4 row">
                   <label className="form-label" for="">
-                    Are you a Smoker ?
+                    Do you prefare smoking rides?
                   </label>
                   <div className="d-flex">
                     <div class="form-check d-flex flex-row align-items-center mx-4 ">

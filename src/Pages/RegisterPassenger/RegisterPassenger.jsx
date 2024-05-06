@@ -1,5 +1,5 @@
 import { useState, useEffect, useReducer } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect, Navigate } from "react-router-dom";
 import "./RegisterPassenger.css";
 
 const RegisterPassenger = () => {
@@ -34,7 +34,7 @@ const RegisterPassenger = () => {
   };
 
   if (redirect) {
-    return <Redirect to="/checkforapprove" />; // put redirect page here on successful registration
+    return <Navigate to="/waitingapprove" />; // put redirect page here on successful registration
   }
 
   return (
@@ -49,7 +49,7 @@ const RegisterPassenger = () => {
                 <form onSubmit={(e) => handleSubmit(e)}>
                   <div data-mdb-input-init className="form-outline mb-4">
                     <label className="form-label" for="">
-                      User Name
+                      Full Name
                     </label>
                     <input
                       type="text"

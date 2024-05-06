@@ -2,12 +2,12 @@ import React, { useEffect, useState, useReducer, Redirect } from "react";
 import { Link } from "react-router-dom";
 import "./PassengerChoosingDriver.css";
 import carImage from "./images/package_UberComfort_new_2022.png";
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation, useNavigate  } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { getAuthToken } from "../../Services/authToken";
 
 const PassengerChoosingDriver = () => {
-  const history = useHistory();
+  const history = useNavigate();
   const location = useLocation();
   const source = sessionStorage.getItem("source")
   const dest = sessionStorage.getItem("dest")
@@ -36,7 +36,7 @@ const PassengerChoosingDriver = () => {
       progress: undefined,
       theme: "colored",
     });
-    history.push("/");
+    history("/");
   }
 
   const headers = {
@@ -114,8 +114,8 @@ const PassengerChoosingDriver = () => {
         )
       ) {
         setFinishStatus(true);
-        // the logic here is to normally go back
-        history.goBack();
+        // the logic here is to normally go back and delete history
+        history("/passengerrequestride", {replace: true});
       } else {
         window.history.pushState(null, null, window.location.pathname);
         setFinishStatus(false);
@@ -181,7 +181,7 @@ const PassengerChoosingDriver = () => {
       theme: "colored",
     });
     setTimeout(() => {
-      history.push("/passengerduringride");
+      history("/passengerduringride");
     }, 2000);
   };
 
@@ -340,7 +340,7 @@ const PassengerChoosingDriver = () => {
                     </div>
                   </div>
                   Driver rating:
-                  <div class="me-2 fw-bold">{driver.rating}</div>
+                  <div class="me-2 fw-bold">{(driver.rating === -1) ? "None" : driver.rating}</div>
                   <div class="actions me-3">
                     <button
                       class="btn btnRegister m-2 "

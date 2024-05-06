@@ -1,12 +1,11 @@
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate , Navigate } from "react-router-dom";
 import { useState, useEffect, useReducer } from "react";
 import "./PassengerDuringRide.css";
 import { ToastContainer, toast } from "react-toastify";
 import { getAuthToken } from "../../Services/authToken";
-import axios from "axios";
 
 const PassengerDuringRide = () => {
-  const history = useHistory();
+  const history = useNavigate ();
 
   const [currentRideInfo, setCurrentRideInfo] = useState(null);
   const [rideStatus, setRideStatus] = useState(null);
@@ -79,7 +78,6 @@ const PassengerDuringRide = () => {
   }, []);
 
   const handleConfirmPayment = () => {
-    // axios is cool, shame we knew about it late in development
     fetch(`https://localhost:7049/api/passenger/confirm-payment/${currentRideId}`, {
       method: "PUT",
       headers: {
@@ -113,7 +111,7 @@ const PassengerDuringRide = () => {
           });
           setRideStatus(true);
           setTimeout(() => {
-            history.push("/feedback");
+            history("/feedback");
           }, 4000);
         }
       })

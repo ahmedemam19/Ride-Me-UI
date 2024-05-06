@@ -1,15 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate  } from "react-router-dom";
 import { useState, useEffect, useReducer } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import {
-  Redirect,
-  useHistory,
-} from "react-router-dom/cjs/react-router-dom.min";
+
 
 import { getAuthToken } from "../../Services/authToken";
 
 const DriverCurrentRide = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [_, forceUpdate] = useReducer((x) => x + 1, 0);
 
   const { token, user } = getAuthToken();
@@ -107,11 +104,11 @@ const DriverCurrentRide = () => {
   rideStatus && confirmPaymentNotification(); // Notifications go brr
 
   const handleGoToRequests = () => {
-    history.push("/driverchooseride");
+    navigate("/driverchooseride", {replace : true});
   };
 
   const handleGoToIncome = () => {
-    history.push("/pickdaymonth");
+    navigate("/pickdaymonth", {replace : true});
   };
 
   return (
