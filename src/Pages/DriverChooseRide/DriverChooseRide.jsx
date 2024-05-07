@@ -11,6 +11,12 @@ const DriverChooseRide = () => {
 
   const [requests, setRequests] = useState();
 
+  const [available, setAvailable] = useState(
+    sessionStorage.getItem("Available")
+  );
+
+  const [cities, setCities] = useState(null);
+
   const { token, user } = getAuthToken();
 
   const headers = {
@@ -60,7 +66,7 @@ const DriverChooseRide = () => {
   const handleAcceptRequest = (rideId, rideSource, rideDest, ridePrice) => {
     fetch(`https://localhost:7049/api/driver/accept-ride/${rideId}`, {
       method: "PUT",
-      headers
+      headers,
     })
       .then((res) => {
         if (res.ok) {
@@ -82,7 +88,7 @@ const DriverChooseRide = () => {
   const handleReject = (rideId) => {
     fetch(`https://localhost:7049/api/driver/reject-ride/${rideId}`, {
       method: "PUT",
-      headers
+      headers,
     })
       .then((res) => {
         if (res.ok) {
@@ -97,13 +103,66 @@ const DriverChooseRide = () => {
   };
 
   if (redirectCurrentRide) {
-    return (<Navigate to="/drivercurrentride" />);
+    return <Navigate to="/drivercurrentride" />;
   }
+
+  const handleSetAvailable = () => {
+    fetch(`https://localhost:7049/api/driver/available/${user.Id}`, {
+      method: "PUT",
+      headers,
+    })
+      .then((res) => {
+        if (res.ok) {
+          console.log("Set to Available");
+          setAvailable(true);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
+  const handleSetNotAvailable = () => {
+    fetch(`https://localhost:7049/api/driver/not-available/${user.Id}`, {
+      method: "PUT",
+      headers,
+    })
+      .then((res) => {
+        if (res.ok) {
+          console.log("Set to Not Available");
+          setAvailable(false);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
 
   return (
     <div>
       <div className="container cardDriverChooseRide my-5">
         <div>
+          <div className="availbaility buttons row d-flex justify-content-center text-center gap-2">
+            <div
+              className={`mb-1 h4 ${
+                available ? "text-success" : "text-danger"
+              }`}
+            >
+              Current Availability: {available ? "Available" : "Not Available"}
+            </div>
+            <button
+              className="col-2 btn btn-primary"
+              onClick={handleSetAvailable}
+            >
+              Available for rides
+            </button>
+            <button
+              className="col-2 btn btn-secondary"
+              onClick={handleSetNotAvailable}
+            >
+              Not Available
+            </button>
+          </div>
           <h2 className="fw-bold">Passenger Requests</h2>
           <div className="table-responsive">
             <table class="table table-hover text-center ">

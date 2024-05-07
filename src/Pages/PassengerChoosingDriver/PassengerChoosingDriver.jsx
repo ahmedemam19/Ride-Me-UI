@@ -186,6 +186,7 @@ const PassengerChoosingDriver = () => {
   };
 
   const handleRequestDriver = (driverId) => {
+    console.log(user.Id)
     fetch(`https://localhost:7049/api/ride/request-ride`, {
       method: "POST",
       headers: {
@@ -193,7 +194,7 @@ const PassengerChoosingDriver = () => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        passengerId: user.UserId, // sessionStorage.getItem("userId")
+        passengerId: user.Id, // sessionStorage.getItem("userId")
         driverId: driverId,
         rideSource: source,
         rideDestination: dest,

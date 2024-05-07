@@ -12,7 +12,7 @@ const RegisterPassenger = () => {
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
 
-    fetch(`https://localhost:7049/api/user/add-passenger`, {
+    fetch(`https://localhost:7049/api/User/add-passenger`, {
       method: "POST",
       headers: { "Content-Type": "application/json"},
       body: JSON.stringify({
@@ -126,7 +126,7 @@ const RegisterPassenger = () => {
                         that checks the status of redirect variable at the start of the page
                     */}
 
-                    <button type="submit" className="btn">
+                    <button type="submit" className="btn btn-primary">
                       Register
                     </button>
                   </div>

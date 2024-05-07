@@ -50,13 +50,14 @@ const LoginPage = () => {
           sessionStorage.setItem("role", decodedData.Role);
           sessionStorage.setItem("roleId", decodedData.Id);
           sessionStorage.setItem("Phone number", decodedData.PhoneNumber);
+          sessionStorage.setItem("Available", decodedData.Available);
 
           if (decodedData.Role === "passenger") {
-            navigate("/passengerrequestride", { replace: true });
+            navigate("/passengerrequestride");
           } else if (decodedData.Role === "driver") {
-            navigate("/driverchooseride", { replace: true });
+            navigate("/driverchooseride");
           } else if (decodedData.Role === "admin") {
-            navigate("/adminpage", { replace: true });
+            navigate("/adminpage");
           }
         }
       })

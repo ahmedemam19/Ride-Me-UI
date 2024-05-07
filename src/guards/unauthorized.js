@@ -16,7 +16,7 @@ const NotAuth = () => {
     if (user.Role === "passenger"){
       navigate("/passengerrequestride", { replace: true });
     } else if (user.Role === "driver"){
-      navigate("/drivercurrentride", { replace: true });
+      navigate("/driverchooseride", { replace: true });
     } else if (user.Role === "driver"){
       // put admin logic here
     }

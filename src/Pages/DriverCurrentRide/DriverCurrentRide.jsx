@@ -66,7 +66,7 @@ const DriverCurrentRide = () => {
       })
       .then((data) => {
         console.log(data[data.length - 1]);
-        setCurrentRideInfo(data);
+        setCurrentRideInfo(data[data.length - 1]);
         setRideStatus(
           data[data.length - 1].status === "completed" ? true : false
         );
@@ -128,7 +128,7 @@ const DriverCurrentRide = () => {
                       type="text"
                       className="form-control"
                       id="passengerName"
-                      value={currentRideInfo && currentRideInfo[0].passenger} // info from api here
+                      value={currentRideInfo && currentRideInfo.passenger} // info from api here
                       readonly
                     />
                   </div>
@@ -142,7 +142,7 @@ const DriverCurrentRide = () => {
                       type="text"
                       className="form-control"
                       id="source"
-                      value={currentRideInfo && currentRideInfo[0].source}
+                      value={currentRideInfo && currentRideInfo.source}
                       readonly
                     />
                   </div>
@@ -156,7 +156,7 @@ const DriverCurrentRide = () => {
                       type="text"
                       className="form-control"
                       id="destination"
-                      value={currentRideInfo && currentRideInfo[0].destination}
+                      value={currentRideInfo && currentRideInfo.destination}
                       readonly
                     />
                   </div>
@@ -170,7 +170,7 @@ const DriverCurrentRide = () => {
                       type="text"
                       className="form-control"
                       id="price"
-                      value={currentRideInfo && currentRideInfo[0].price} // info from api here
+                      value={currentRideInfo && currentRideInfo.price} // info from api here
                       readonly
                     />
                   </div>
@@ -187,7 +187,7 @@ const DriverCurrentRide = () => {
                       id="phoneNumber"
                       value={
                         currentRideInfo &&
-                        currentRideInfo[0].passengerPhoneNumber
+                        currentRideInfo.passengerPhoneNumber
                       } // info from api here
                       readonly
                     />
